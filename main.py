@@ -29,7 +29,6 @@ import os
 
 import cv2
 
-from implementation import ImageProcessing
 from my_implementation import MyImageProcessing
 
 def main() -> None:
@@ -41,11 +40,18 @@ def main() -> None:
         choices=[
             "edges",
             "corners",
-            "circles",
             "grayscale",
             "gamma_correction",
         ],
-        help="Метод обработки: edges, corners, circles",
+        help="Метод обработки: edges, corners, grayscale, gamma_correction",
+    )
+    parser.add_argument(
+        "conv",
+        choices=[
+            "base",
+            "matrix",
+        ],
+        help="Метод расчета свертки: base, matrix",
     )
     parser.add_argument(
         "input",
@@ -66,13 +72,16 @@ def main() -> None:
 
     processor = MyImageProcessing()
 
+    if args.conv == "matrix":
+        convolution = processor._matrix_convolution
+    else:
+        convolution = processor._convolution
+
     # Выбор метода
     if args.method == "edges":
-        result = processor.edge_detection(image)
+        result = processor.edge_detection(image, convolution)
     elif args.method == "corners":
-        result = processor.corner_detection(image)
-    elif args.method == "circles":
-        result = processor.circle_detection(image)
+        result = processor.corner_detection(image, convolution=convolution)
     elif args.method == "grayscale":
         result = processor._rgb_to_grayscale(image)
     elif args.method == "gamma_correction":

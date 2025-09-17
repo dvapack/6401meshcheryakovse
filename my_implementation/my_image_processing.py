@@ -18,6 +18,7 @@ import interfaces
 
 import numpy as np
 
+from typing import Callable
 
 class MyImageProcessing(interfaces.IImageProcessing):
     """
@@ -27,22 +28,50 @@ class MyImageProcessing(interfaces.IImageProcessing):
     в оттенки серого, гамма-коррекцию, а также обнаружение границ, углов и окружностей.
 
     Методы:
-        _convolution(image, kernel): Выполняет свёртку изображения с ядром.
+        _convolution(image, kernel): Выполняет классическую свёртку изображения с ядром.
+        _matrix_convolution(image, kernel): Выполняет свертку изображения с ядром через матричную форму.
         _rgb_to_grayscale(image): Преобразует RGB-изображение в оттенки серого.
         _gamma_correction(image, gamma): Применяет гамма-коррекцию.
         edge_detection(image): Обнаруживает границы (Canny).
         corner_detection(image): Обнаруживает углы (Harris).
-        circle_detection(image): Обнаруживает окружности (HoughCircles).
     """
 
-    def _ыconvolution(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    def _convolution(self, image: np.ndarray, kernel: np.ndarray):
+        """
+        Выполняет свёртку изображения с заданным ядром.
+
+        Args:
+            image (np.ndarray): Входное изображение (чёрно-белое или цветное).
+            kernel (np.ndarray): Ядро свёртки (матрица).
+
+        Returns:
+            np.ndarray: Изображение после применения свёртки.
+        """
+        kern_h, kern_w = kernel.shape
+        img_h, img_w= image.shape[0:2]
+        out_h, out_w, out_d = img_h - kern_h + 1, img_w - kern_w + 1, image.ndim
+        if image.ndim == 2:
+            conv_res = np.zeros((out_h, out_w))
+            for i in range(out_h):
+                for j in range(out_w):
+                    conv_res[i, j] = np.sum(image[i:i+kern_h, j:j+kern_w] * kernel)
+        else:
+            out_d = image.shape[2]
+            conv_res = np.zeros((out_h, out_w, out_d))
+            for i in range(out_h):
+                for j in range(out_w):
+                    for d in range(out_d):
+                        conv_res[i, j, d] = np.clip(np.sum(image[i:i+kern_h, j:j+kern_w, d] * kernel), 0, 255)
+        return conv_res
+
+    def _matrix_convolution(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
         """
         Выполняет свёртку изображения с заданным ядром.
 
         Использует матричную форму свертки.
 
         Args:
-            image (np.ndarray): Входное изображение (чёрно-белое).
+            image (np.ndarray): Входное изображение (чёрно-белое или цветное).
             kernel (np.ndarray): Ядро свёртки (матрица).
 
         Returns:
@@ -70,12 +99,27 @@ class MyImageProcessing(interfaces.IImageProcessing):
             result.append(channel_result)
         return np.stack(result, axis=-1) if channels == 3 else result[0]
 
+    def _convolution_with_padding(self, image: np.ndarray, kernel: np.ndarray,
+                                convolution: Callable[[np.ndarray, np.ndarray], np.ndarray]) -> np.ndarray:
+        """
+        Выполняет свертку с паддингом.
+        Args:
+            image (np.ndarray): Входное изображение (чёрно-белое или цветное).
+            kernel (np.ndarray): Ядро свёртки (матрица).
+
+        Returns:
+            np.ndarray: Изображение после применения свёртки.
+        """
+        kernel_h, kernel_w = kernel.shape
+        pad_h = kernel_h // 2
+        pad_w = kernel_w // 2
+        padded_image = np.pad(image, ((pad_h, pad_h), (pad_w, pad_w)), mode='constant')
+        result = convolution(padded_image, kernel)
+        return result
+
     def _rgb_to_grayscale(self, image: np.ndarray) -> np.ndarray:
         """
         Преобразует RGB-изображение в оттенки серого.
-
-        Использует функцию cv2.cvtColor для преобразования цветного изображения
-        в чёрно-белое.
 
         Args:
             image (np.ndarray): Входное RGB-изображение.
@@ -89,8 +133,6 @@ class MyImageProcessing(interfaces.IImageProcessing):
         """
         Применяет гамма-коррекцию к изображению.
 
-        Коррекция осуществляется с помощью таблицы преобразования значений пикселей.
-
         Args:
             image (np.ndarray): Входное изображение.
             gamma (float): Коэффициент гамма-коррекции (>0).
@@ -103,11 +145,12 @@ class MyImageProcessing(interfaces.IImageProcessing):
         return (corrected * 255).astype(np.uint8)
 
 
-    def edge_detection(self, image: np.ndarray) -> np.ndarray:
+    def edge_detection(self, image: np.ndarray,
+                        convolution: Callable[[np.ndarray, np.ndarray], np.ndarray] = None) -> np.ndarray:
         """
         Выполняет обнаружение границ на изображении.
 
-        Использует оператор Кэнни (cv2.Canny) для выделения границ.
+        Использует оператор Собеля для выделения границ.
         Предварительно изображение преобразуется в оттенки серого.
 
         Args:
@@ -116,84 +159,58 @@ class MyImageProcessing(interfaces.IImageProcessing):
         Returns:
             np.ndarray: Одноканальное изображение с выделенными границами.
         """
+        if convolution is None:
+            convolution = self._convolution
         gray = self._rgb_to_grayscale(image)
         sobel_x = np.array([[-1, 0, 1],
                             [-2, 0, 2],
                             [-1, 0, 1]])
-
         sobel_y = np.array([[-1, -2, -1],
                             [0, 0, 0],
                             [1, 2, 1]])
-        grad_x = self._convolution(gray, sobel_x)
-        grad_y = self._convolution(gray, sobel_y)
-
+        grad_x = convolution(gray, sobel_x)
+        grad_y = convolution(gray, sobel_y)
         magnitude = np.sqrt(grad_x**2 + grad_y**2)
-
         return magnitude.astype(np.uint8)
 
-    def _convolution_with_padding(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
-        """Свёртка с автоматическим паддингом"""
-        # Добавляем паддинг
-        kernel_h, kernel_w = kernel.shape
-        pad_h = kernel_h // 2
-        pad_w = kernel_w // 2
-        padded_image = np.pad(image, ((pad_h, pad_h), (pad_w, pad_w)), mode='constant')
+    def corner_detection(self, image: np.ndarray, k_value: float = 0.04, threshold: float = 0.01,
+                        convolution: Callable[[np.ndarray, np.ndarray], np.ndarray] = None) -> np.ndarray:
+        """
+        Выполняет детектирование углов на изображении с помощью алгоритма Харриса.
+        Args:
+            image (np.ndarray): Входное изображение (чёрно-белое или цветное).
+            k_value (float): Вес следа.
+            threshold (float): Порог отклика.
 
-        # Выполняем свёртку
-        return self._convolution(padded_image, kernel)
-
-    def _convolution(self, image, kernel):
-        kern_h, kern_w = kernel.shape
-        img_h, img_w= image.shape[0:2]
-        out_h, out_w, out_d = img_h - kern_h + 1, img_w - kern_w + 1, image.ndim
-        if image.ndim == 2:
-            conv_res = np.zeros((out_h, out_w))
-            for i in range(out_h):
-                for j in range(out_w):
-                    conv_res[i, j] = np.sum(image[i:i+kern_h, j:j+kern_w] * kernel)
-        else:
-            out_d = image.shape[2]
-            conv_res = np.zeros((out_h, out_w, out_d))
-            for i in range(out_h):
-                for j in range(out_w):
-                    for d in range(out_d):
-                        conv_res[i, j, d] = np.clip(np.sum(image[i:i+kern_h, j:j+kern_w, d] * kernel), 0, 255)
-        return conv_res
-
-    def corner_detection(self, image: np.ndarray, k: float = 0.04, threshold: float = 0.01) -> np.ndarray:
-        """Детектор углов Харриса"""
+        Returns:
+            np.ndarray: Одноканальное изображение с выделенными углами.
+        """
+        if convolution is None:
+            convolution = self._convolution
         if image.ndim == 3:
             gray = self._rgb_to_grayscale(image)
         else:
             gray = image
-
         sobel_x = np.array([[-1, 0, 1],
                             [-2, 0, 2],
                             [-1, 0, 1]])
-
         sobel_y = np.array([[-1, -2, -1],
                             [0, 0, 0],
                             [1, 2, 1]])
-
-        Ix = self._convolution_with_padding(gray, sobel_x)
-        Iy = self._convolution_with_padding(gray, sobel_y)
-
+        Ix = self._convolution_with_padding(gray, sobel_x, convolution)
+        Iy = self._convolution_with_padding(gray, sobel_y, convolution)
         Ixx = Ix * Ix
         Ixy = Ix * Iy
         Iyy = Iy * Iy
-
         gaussian_kernel = np.array([[1, 2, 1],
                                     [2, 4, 2],
                                     [1, 2, 1]]) / 16
-
-        Sxx = self._convolution_with_padding(Ixx, gaussian_kernel)
-        Sxy = self._convolution_with_padding(Ixy, gaussian_kernel)
-        Syy = self._convolution_with_padding(Iyy, gaussian_kernel)
-
+        Sxx = self._convolution_with_padding(Ixx, gaussian_kernel, convolution)
+        Sxy = self._convolution_with_padding(Ixy, gaussian_kernel, convolution)
+        Syy = self._convolution_with_padding(Iyy, gaussian_kernel, convolution)
         det = Sxx * Syy - Sxy**2
         trace = Sxx + Syy
-        R = det - k * trace**2
-
+        R = det - k_value * trace**2
         corners = np.array(gray)
         corners[R > threshold * R.max()] = 255
 
