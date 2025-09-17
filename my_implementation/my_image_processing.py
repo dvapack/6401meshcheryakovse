@@ -35,7 +35,7 @@ class MyImageProcessing(interfaces.IImageProcessing):
         circle_detection(image): Обнаруживает окружности (HoughCircles).
     """
 
-    def _convolution(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    def _ыconvolution(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
         """
         Выполняет свёртку изображения с заданным ядром.
 
@@ -142,7 +142,7 @@ class MyImageProcessing(interfaces.IImageProcessing):
         # Выполняем свёртку
         return self._convolution(padded_image, kernel)
 
-    def _simple_conv(image, kernel):
+    def _convolution(self, image, kernel):
         kern_h, kern_w = kernel.shape
         img_h, img_w= image.shape[0:2]
         out_h, out_w, out_d = img_h - kern_h + 1, img_w - kern_w + 1, image.ndim
