@@ -28,6 +28,7 @@ import argparse
 import os
 
 import cv2
+import time
 
 from my_implementation import MyImageProcessing
 
@@ -76,7 +77,7 @@ def main() -> None:
         convolution = processor._matrix_convolution
     else:
         convolution = processor._convolution
-
+    start_time = time.time()
     # Выбор метода
     if args.method == "edges":
         result = processor.edge_detection(image, convolution)
@@ -89,7 +90,10 @@ def main() -> None:
     else:
         print("Ошибка: неизвестный метод")
         return
-
+    
+    end_time = time.time()
+    print(f"Время выполнения: {end_time - start_time:.4f} секунд")
+    
     # Определение пути для сохранения
     if args.output:
         output_path = args.output

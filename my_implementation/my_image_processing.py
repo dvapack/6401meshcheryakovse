@@ -11,7 +11,6 @@
 - обнаружение углов (алгоритм Харриса)
 - обнаружение окружностей (метод пока не реализован)
 
-Модуль предназначен для учебных целей (лабораторная работа по курсу "Технологии программирования на Python").
 """
 
 import interfaces
@@ -19,6 +18,7 @@ import interfaces
 import numpy as np
 
 from typing import Callable
+
 
 class MyImageProcessing(interfaces.IImageProcessing):
     """
@@ -48,7 +48,7 @@ class MyImageProcessing(interfaces.IImageProcessing):
             np.ndarray: Изображение после применения свёртки.
         """
         kern_h, kern_w = kernel.shape
-        img_h, img_w= image.shape[0:2]
+        img_h, img_w = image.shape[0:2]
         out_h, out_w, out_d = img_h - kern_h + 1, img_w - kern_w + 1, image.ndim
         if image.ndim == 2:
             conv_res = np.zeros((out_h, out_w))
@@ -61,7 +61,8 @@ class MyImageProcessing(interfaces.IImageProcessing):
             for i in range(out_h):
                 for j in range(out_w):
                     for d in range(out_d):
-                        conv_res[i, j, d] = np.clip(np.sum(image[i:i+kern_h, j:j+kern_w, d] * kernel), 0, 255)
+                        conv_res[i, j, d] = np.clip(np.sum(image[i:i+kern_h, j:j+kern_w, d] *
+                                                            kernel), 0, 255)
         return conv_res
 
     def _matrix_convolution(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
@@ -144,7 +145,6 @@ class MyImageProcessing(interfaces.IImageProcessing):
         corrected = np.power(image_normalized, 1.0/gamma)
         return (corrected * 255).astype(np.uint8)
 
-
     def edge_detection(self, image: np.ndarray,
                         convolution: Callable[[np.ndarray, np.ndarray], np.ndarray] = None) -> np.ndarray:
         """
@@ -211,8 +211,9 @@ class MyImageProcessing(interfaces.IImageProcessing):
         det = Sxx * Syy - Sxy**2
         trace = Sxx + Syy
         R = det - k_value * trace**2
-        corners = np.array(gray)
-        corners[R > threshold * R.max()] = 255
+        corners = np.array(image)
+        print(corners.shape)
+        corners[R > threshold * R.max()] = [255, 0, 0]
 
         return corners
 
