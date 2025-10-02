@@ -95,16 +95,18 @@ class CatImageProcessor:
             url = data["url"]
             breeds = data.get("breeds", [])
             breed_name = breeds[0]["name"] if breeds else "Unknown"
+            dir = os.path.join(output_dir, breed_name)
+            os.makedirs(dir, exist_ok=True)
             image_array = self.download_image(url)
             method = random.choice(['color', 'grayscale'])
             if method == 'grayscale':
                 cat_img = GrayscaleCatImage(url, breed_name, image_array)
             else:
                 cat_img = ColorCatImage(url, breed_name, image_array)
-            original_path = os.path.join(output_dir, f"{i}_{breed_name}_original.png")
+            original_path = os.path.join(dir, f"{i}_{breed_name}_original.png")
             Image.fromarray(cat_img.image).save(original_path)
             custom_edges = cat_img.custom_edge_detection()
-            custom_path = os.path.join(output_dir, f"{i}_{breed_name}_custom_edges.png")
+            custom_path = os.path.join(dir, f"{i}_{breed_name}_custom_edges.png")
             Image.fromarray(custom_edges).save(custom_path)
             lib_edges = cat_img.library_edge_detection()
             lib_path = os.path.join(output_dir, f"{i}_{breed_name}_library_edges.png")

@@ -34,12 +34,32 @@ class CatImage(ABC):
     """
 
     def __init__(self, url: str, breed: str, image_array: np.ndarray):
-        self.url = url
-        self.breed = breed
-        self.custom_processor = MyImageProcessing()
-        self.library_processor = ImageProcessing()
-        self.image = self.prepare_image(image_array)
+        self._url = url
+        self._breed = breed
+        self._custom_processor = MyImageProcessing()
+        self._library_processor = ImageProcessing()
+        self._image = self.prepare_image(image_array)
 
+    @property
+    def url(self) -> str:
+        return self._url
+    
+    @property
+    def breed(self) -> str:
+        return self._breed
+    
+    @property
+    def custom_processor(self) -> MyImageProcessing:
+        return self._custom_processor
+    
+    @property
+    def library_processor(self) -> ImageProcessing:
+        return self._library_processor
+    
+    @property
+    def image(self):
+        return self._image
+    
     @abstractmethod
     def prepare_image(self, image_array: np.ndarray) -> np.ndarray:
         """
@@ -72,14 +92,14 @@ class CatImage(ABC):
             new_image = np.clip(self.image.astype(np.int32) + 
                                 other.image.astype(np.int32), 0, 255).astype(np.uint8)
             return self.__class__(self.url, f"{self.breed}+{other.breed}", new_image)
-        return NotImplemented
-
+        raise TypeError
+    
     def __sub__(self, other: 'CatImage') -> 'CatImage':
         if isinstance(other, CatImage):
             new_image = np.clip(self.image.astype(np.int32) -
                                  other.image.astype(np.int32), 0, 255).astype(np.uint8)
             return self.__class__(self.url, f"{self.breed}-{other.breed}", new_image)
-        return NotImplemented
+        raise TypeError
 
     def __str__(self) -> str:
         return f"CatImage: breed={self.breed}, url={self.url}, shape={self.image.shape}"
@@ -91,7 +111,10 @@ class ColorCatImage(CatImage):
     """
 
     def prepare_image(self, image_array: np.ndarray) -> np.ndarray:
-        return image_array
+        if image_array.ndim == 3:
+            return image_array
+        else:
+            return np.stack([image_array, image_array, image_array], axis=-1)
 
 
 class GrayscaleCatImage(CatImage):
@@ -101,5 +124,6 @@ class GrayscaleCatImage(CatImage):
 
     def prepare_image(self, image_array: np.ndarray) -> np.ndarray:
         if image_array.ndim == 3:
-            return self.custom_processor._rgb_to_grayscale(image_array).astype(np.uint8)
+            self._image = self.custom_processor._rgb_to_grayscale(image_array).astype(np.uint8)
+            return self.image
         return image_array
