@@ -1,109 +1,51 @@
 """
 main.py
 
-Пример лабораторной работы по курсу "Технологии программирования на Python".
+Лабораторная работа №2 по курсу "Технологии программирования на Python".
 
-Модуль предназначен для демонстрации работы с обработкой изображений с помощью библиотеки OpenCV.
-Реализован консольный интерфейс для применения различных методов обработки к изображению:
-- обнаружение границ (edges)
-- обнаружение углов (corners)
-- обнаружение окружностей (circles)
+Программа скачивает изображения кошек из API, обрабатывает их выделением контуров
+пользовательским и библиотечным методами, и сохраняет результаты.
 
 Запуск:
-    python main.py <метод> <путь_к_изображению> [-o путь_для_сохранения]
+    python main.py [limit]
 
 Аргументы:
-    метод: edges | corners | circles
-    путь_к_изображению: путь к входному изображению
-    -o, --output: путь для сохранения результата (по умолчанию: <имя_входного_файла>_result.png)
-
-Пример:
-    python main.py edges input.jpg
-    python main.py corners input.jpg -o corners_result.png
-
-Автор: [Ваше имя]
+    limit: количество изображений для обработки (по умолчанию 1)
 """
 
 import argparse
 import os
 
-import cv2
-import time
+from dotenv import load_dotenv
 
-from my_implementation import MyImageProcessing
+from my_implementation import CatImageProcessor
 
 def main() -> None:
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
+    if not api_key:
+        print("Ошибка: API_KEY не найден в .env файле")
+        return
+
     parser = argparse.ArgumentParser(
-        description="Обработка изображения с помощью методов ImageProcessing (OpenCV).",
+        description="Лабораторная работа №2: обработка изображений кошек.",
     )
     parser.add_argument(
-        "method",
-        choices=[
-            "edges",
-            "corners",
-            "grayscale",
-            "gamma_correction",
-        ],
-        help="Метод обработки: edges, corners, grayscale, gamma_correction",
-    )
-    parser.add_argument(
-        "conv",
-        choices=[
-            "base",
-            "matrix",
-        ],
-        help="Метод расчета свертки: base, matrix",
-    )
-    parser.add_argument(
-        "input",
-        help="Путь к входному изображению",
-    )
-    parser.add_argument(
-        "-o", "--output",
-        help="Путь для сохранения результата (по умолчанию: <input>_result.png)",
+        "limit",
+        type=int,
+        default=1,
+        help="Количество изображений для обработки (по умолчанию 1)",
     )
 
     args = parser.parse_args()
 
-    # Загрузка изображения
-    image = cv2.imread(args.input)
-    if image is None:
-        print(f"Ошибка: не удалось загрузить изображение {args.input}")
-        return
-
-    processor = MyImageProcessing()
-
-    if args.conv == "matrix":
-        convolution = processor._matrix_convolution
-    else:
-        convolution = processor._convolution
-    start_time = time.time()
-    # Выбор метода
-    if args.method == "edges":
-        result = processor.edge_detection(image, convolution)
-    elif args.method == "corners":
-        result = processor.corner_detection(image, convolution=convolution)
-    elif args.method == "grayscale":
-        result = processor._rgb_to_grayscale(image)
-    elif args.method == "gamma_correction":
-        result = processor._gamma_correction(image)
-    else:
-        print("Ошибка: неизвестный метод")
-        return
-    
-    end_time = time.time()
-    print(f"Время выполнения: {end_time - start_time:.4f} секунд")
-    
-    # Определение пути для сохранения
-    if args.output:
-        output_path = args.output
-    else:
-        base, ext = os.path.splitext(args.input)
-        output_path = f"{base}_result.png"
-
-    # Сохранение результата
-    cv2.imwrite(output_path, result)
-    print(f"Результат сохранён в {output_path}")
+    processor = CatImageProcessor(api_key)
+    try:
+        images_data = processor.fetch_images(limit=args.limit)
+        processor.process_and_save(images_data)
+        print("Обработка завершена.")
+    except Exception as e:
+        print(f"Ошибка: {e}")
 
 
 if __name__ == "__main__":

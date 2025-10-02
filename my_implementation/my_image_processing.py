@@ -9,8 +9,6 @@
 - гамма-коррекция
 - обнаружение границ (оператор Кэнни)
 - обнаружение углов (алгоритм Харриса)
-- обнаружение окружностей (метод пока не реализован)
-
 """
 
 import interfaces
@@ -216,18 +214,3 @@ class MyImageProcessing(interfaces.IImageProcessing):
         corners[R > threshold * R.max()] = [255, 0, 0]
 
         return corners
-
-    def circle_detection(self, image: np.ndarray) -> np.ndarray:
-        """
-        Выполняет обнаружение окружностей на изображении.
-
-        Использует преобразование Хафа (cv2.HoughCircles) для поиска окружностей.
-        Найденные окружности выделяются зелёным цветом, центры — красным.
-
-        Args:
-            image (np.ndarray): Входное изображение (RGB).
-
-        Returns:
-            np.ndarray: Изображение с выделенными окружностями.
-        """
-        raise NotImplementedError("Метод обнаружения окружностей пока не реализован.")
