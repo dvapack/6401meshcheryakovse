@@ -1,29 +1,19 @@
 from typing import Generator, List, Any
-from abc import ABC, abstractmethod
-import time
-import functools
 
-from base_pipeline import BasePipeline
-from dataloader import Dataloader
+from .base_pipeline import BasePipeline, time_logger, memory_logger
+from .dataloader import Dataloader
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
-def time_logger(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        print(f"Метод {func.__name__} выполнен за {end_time - start_time:.4f} секунд")
-        return result
-    return wrapper
 
 class Task1Pipeline(BasePipeline, Dataloader):
     """Класс для выполнения задания 1"""
 
-    def __init__(self, csv_path:str, parquet_file: str = "parquet_file.parquet"):
+    def __init__(self, csv_path: str, parquet_file: str = "parquet_file.parquet"):
         Dataloader.__init__(self, csv_path, parquet_file)
 
+    @time_logger
     def get_data(self, columns: List[str] = ['Country.Name', 'per_capita']) -> pd.DataFrame | Generator[pd.DataFrame, None, None]:
         """
         Метод для загрузки данных для конкретной задачи
@@ -42,7 +32,8 @@ class Task1Pipeline(BasePipeline, Dataloader):
                     chunk['Country.Population']
                     )
             yield chunk[columns]
-    
+
+    @time_logger
     def aggregate_data(self, data: pd.DataFrame | Generator[pd.DataFrame, None, None]) -> pd.DataFrame:
         """
         Метод для агрегации данных для конкретной задачи
@@ -55,10 +46,11 @@ class Task1Pipeline(BasePipeline, Dataloader):
         """
         aggregated = pd.DataFrame()
         for chunk in data:
-            aggregated = pd.concat([aggregated, chunk[['Country.Name', 'per_capita']]], 
-                                       ignore_index=True)
+            aggregated = pd.concat([aggregated, chunk], ignore_index=True)
+        aggregated = aggregated.groupby('Country.Name')['per_capita'].mean().reset_index()
         return aggregated
-    
+
+    @time_logger
     def task_job(self, data: pd.DataFrame) -> Any:
         """
         Метод для выполнения манипуляций над агрегированными данными
@@ -69,11 +61,37 @@ class Task1Pipeline(BasePipeline, Dataloader):
         Returns:
             Any: Результат задания
         """
-        pass
+        sorted_data = data.sort_values('per_capita')
+        greenest = list(sorted_data.head(3).itertuples(index=False, name=None))
+        dirtiest = list(sorted_data.tail(3).itertuples(index=False, name=None))
+        return greenest, dirtiest
     
+    def plot_results(self, data: Any):
+        """
+        Метод для отрисовки результатов работы
+        
+        Args:
+            data (Any): Результат работы
+        """
+        plt.figure(figsize=(12, 8))
+    
+        greenest, dirtiest = data
+        all_countries = greenest + dirtiest 
+        countries = [x[0] for x in all_countries]
+        emissions_per_capita = [x[1] for x in all_countries]
+        
+        plt.bar(countries, emissions_per_capita, color=['green']*3 + ['red']*3, alpha=0.7)
+        plt.title('Задание 1: Самые "зеленые" и "грязные" страны\n(выбросы на душу населения)', fontsize=14)
+        plt.yscale("log")
+        plt.ylabel('Выбросы CO2 на душу населения')
+        plt.xticks(rotation=45)
+        plt.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.show()
+
+    @memory_logger
     def run(self):
         """
         Обертка-метод для вызова выполнения задания
         """
-        
-        pass
+        self.plot_results(self.task_job(self.aggregate_data(self.get_data(['Country.Name', 'per_capita']))))

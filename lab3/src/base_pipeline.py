@@ -1,10 +1,37 @@
 from typing import Generator, List, Any
 from abc import ABC, abstractmethod
 
-from dataloader import Dataloader
+import time
+import functools
+import psutil
+import os
 
 import pandas as pd
 
+def time_logger(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"Метод {func.__name__} выполнен за {end_time - start_time:.4f} секунд")
+        return result
+    return wrapper
+
+def memory_logger(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        process = psutil.Process(os.getpid())
+        memory_before = process.memory_info().rss / 1024 / 1024  # в МБ
+        
+        result = func(*args, **kwargs)
+        
+        memory_after = process.memory_info().rss / 1024 / 1024  # в МБ
+        memory_used = memory_after - memory_before
+        
+        print(f"Метод {func.__name__} использовал {memory_used:.2f} МБ памяти")
+        return result
+    return wrapper
 
 class BasePipeline(ABC):
     """Базовый класс для выполнения лабораторной работы"""
@@ -45,6 +72,16 @@ class BasePipeline(ABC):
 
         Returns:
             Any: Результат задания
+        """
+        pass
+    
+    @abstractmethod
+    def plot_results(self, data: Any):
+        """
+        Метод для отрисовки результатов работы
+        
+        Args:
+            data (Any): Результат работы
         """
         pass
     
