@@ -18,7 +18,7 @@ def main():
     third_task = Task3Pipeline(csv_path="lab3/data/global_emissions.csv")
     third_task.run()
     print("-------------Task 4------------------")
-    forth_task = Task4Pipeline(csv_path="lab3/data/global_emissions.csv")
+    forth_task = Task4Pipeline(csv_path="lab3/data/global_emissions.csv", parquet_file="lab3/data/global_emissions.parquet")
     forth_task.run()
 
 

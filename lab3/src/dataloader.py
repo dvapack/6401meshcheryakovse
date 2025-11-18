@@ -17,7 +17,7 @@ class Dataloader:
     """
     _chunksize = 1000
 
-    def __init__(self, csv_path: str, parquet_path: str = "parquet_file.parquet"):
+    def __init__(self, csv_path: str, parquet_path: str = "data/parquet_file.parquet"):
         self._csv_path = csv_path
         self._parquet_path = parquet_path
 
