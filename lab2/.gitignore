@@ -1,0 +1,6 @@
+.venv/
+results/
+__pycache__/
+.ropeproject/
+.flake8
+.env
