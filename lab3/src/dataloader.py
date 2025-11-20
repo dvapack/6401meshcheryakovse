@@ -15,7 +15,7 @@ class Dataloader:
         3. Создание Parquet файла
         4. Сравнение скорости загрузки данных из SCV и Parquet
     """
-    _chunksize = 1000
+    _chunksize = 120
 
     def __init__(self, csv_path: str, parquet_path: str = "data/parquet_file.parquet"):
         self._csv_path = csv_path

@@ -14,7 +14,7 @@ class Task1Pipeline(BasePipeline, Dataloader):
         Dataloader.__init__(self, csv_path, parquet_file)
 
     @time_logger
-    def get_data(self, columns: List[str] = ['Country.Name', 'per_capita']) -> pd.DataFrame | Generator[pd.DataFrame, None, None]:
+    def get_data(self, columns: List[str] = ['Country.Name', 'per_capita', 'count']) -> pd.DataFrame | Generator[pd.DataFrame, None, None]:
         """
         Метод для загрузки данных для конкретной задачи
         
@@ -31,6 +31,7 @@ class Task1Pipeline(BasePipeline, Dataloader):
                     chunk['Emissions.Production.CO2.Total'] / 
                     chunk['Country.Population']
                     )
+            chunk['count'] = 1
             yield chunk[columns]
 
     @time_logger
@@ -44,10 +45,16 @@ class Task1Pipeline(BasePipeline, Dataloader):
         Returns:
             pd.DataFrame: DataFrame с агрегрированными данными
         """
-        aggregated = pd.DataFrame()
+        aggregated = pd.DataFrame(columns=['Country.Name', 'per_capita', 'count'])
         for chunk in data:
             aggregated = pd.concat([aggregated, chunk], ignore_index=True)
-        aggregated = aggregated.groupby('Country.Name')['per_capita'].mean().reset_index()
+            print(f"aggregated.memory_usage: {aggregated.memory_usage}")
+            aggregated = aggregated.groupby('Country.Name').agg({
+                                                                'per_capita': 'sum',
+                                                                'count': 'sum'
+                                                            }).reset_index()
+        aggregated['per_capita'] = aggregated['per_capita'] / aggregated['count']
+        
         return aggregated
 
     @time_logger
@@ -89,9 +96,11 @@ class Task1Pipeline(BasePipeline, Dataloader):
         plt.tight_layout()
         plt.show()
 
+        print(f"countries {countries}, emissions_per_capita {emissions_per_capita}")
+
     @memory_logger
     def run(self):
         """
         Обертка-метод для вызова выполнения задания
         """
-        self.plot_results(self.task_job(self.aggregate_data(self.get_data(['Country.Name', 'per_capita']))))
+        self.plot_results(self.task_job(self.aggregate_data(self.get_data(['Country.Name', 'per_capita', 'count']))))

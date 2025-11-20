@@ -40,11 +40,30 @@ class Task2Pipeline(BasePipeline, Dataloader):
         Returns:
             pd.DataFrame: DataFrame с агрегрированными данными
         """
-        aggregated = pd.DataFrame()
+        aggregated = pd.DataFrame(columns=['Country.Name', 'sum_x', 'sum_x2', 'count'])
+        
         for chunk in data:
-            aggregated = pd.concat([aggregated, chunk], ignore_index=True)
-        return aggregated
-    
+            chunk_agg = chunk.groupby('Country.Name').agg({
+                'Emissions.Production.CO2.Total': ['sum', lambda x: (x**2).sum(), 'count']
+            }).reset_index()
+            
+            chunk_agg.columns = ['Country.Name', 'sum_x', 'sum_x2', 'count']
+            aggregated = pd.concat([aggregated, chunk_agg], ignore_index=True)
+            aggregated = aggregated.groupby('Country.Name').agg({
+                'sum_x': 'sum',
+                'sum_x2': 'sum', 
+                'count': 'sum'
+            }).reset_index()
+        
+        aggregated['mean_x'] = aggregated['sum_x'] / aggregated['count']
+        aggregated['mean_x2'] = aggregated['sum_x2'] / aggregated['count']
+        aggregated['variance'] = aggregated['mean_x2'] - (aggregated['mean_x'] ** 2)
+        
+        aggregated['std'] = np.sqrt((aggregated['variance']).fillna(0))
+        
+        print(f"aggregated.memory_usage: {aggregated.memory_usage()}")
+        return aggregated[['Country.Name', 'mean_x', 'std', 'count', 'variance']]
+
     @time_logger  
     def task_job(self, data: pd.DataFrame) -> Any:
         """
@@ -56,25 +75,26 @@ class Task2Pipeline(BasePipeline, Dataloader):
         Returns:
             Any: Результат задания
         """
-        sorted_std = data.groupby('Country.Name')['Emissions.Production.CO2.Total'].std().reset_index()
-        sorted_std = sorted_std.dropna()
-        sorted_std = sorted_std.sort_values('Emissions.Production.CO2.Total')
-    
-        lowest_var = list(sorted_std.head(3).itertuples(index=False, name=None))
-        highest_var = list(sorted_std.tail(3).itertuples(index=False, name=None))
+        sorted_var = data.sort_values('variance')
         
-        selected_countries = [country for country, _ in lowest_var + highest_var]
+        lowest_var = list(sorted_var.head(3).itertuples(index=False, name=None))
+        highest_var = list(sorted_var.tail(3).itertuples(index=False, name=None))
+        
+        selected_countries = [country for country, _, _, _, _ in lowest_var + highest_var]
         ci_data = {}
         
         for country in selected_countries:
-            country_data = data[data['Country.Name'] == country]['Emissions.Production.CO2.Total']
-            if len(country_data) > 1:
-                mean = country_data.mean()
-                sem = country_data.std(ddof=1) / np.sqrt(len(country_data))
+            country_stats = data[data['Country.Name'] == country].iloc[0]
+            mean = country_stats['mean_x']
+            std = country_stats['std']
+            n = country_stats['count']
+            
+            if n > 1:
+                sem = std / np.sqrt(n)
                 ci = norm.ppf(0.95) * sem
                 ci_data[country] = (mean - ci, mean + ci)
             else:
-                ci_data[country] = (country_data.iloc[0], country_data.iloc[0])
+                ci_data[country] = (mean, mean)
         
         return lowest_var, highest_var, ci_data
 
