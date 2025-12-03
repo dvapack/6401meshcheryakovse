@@ -1,0 +1,25 @@
+2025-12-03 22:12:41 - asyncio - DEBUG - [selector_events.py:64] - Using selector: EpollSelector
+2025-12-03 22:12:41 - __main__ - INFO - [main.py:43] - Начинаем обработку 2 изображений...
+2025-12-03 22:12:42 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 0
+2025-12-03 22:12:42 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 1
+2025-12-03 22:12:44 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод download_images выполнен за 2.5867 секунд
+2025-12-03 22:12:44 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:137] - Обработка изображения 0 (Australian Mist) в процессе PID[54204]
+2025-12-03 22:12:44 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:137] - Обработка изображения 1 (Turkish Van) в процессе PID[54205]
+2025-12-03 22:12:51 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод custom_edge_detection выполнен за 7.4061 секунд
+2025-12-03 22:12:51 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод library_edge_detection выполнен за 0.0030 секунд
+2025-12-03 22:12:51 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:42] - Метод process_single_image выполнен за 7.4103 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод custom_edge_detection выполнен за 13.1809 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод library_edge_detection выполнен за 0.0051 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:42] - Метод process_single_image выполнен за 13.1869 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод process_images_parallel выполнен за 13.2612 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0521 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0071 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.1118 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0790 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0335 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_one_dir_async выполнен за 0.1124 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0191 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_one_dir_async выполнен за 0.1131 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_images_async выполнен за 0.1135 секунд
+2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод run_async выполнен за 15.9619 секунд
+2025-12-03 22:12:57 - __main__ - INFO - [main.py:45] - Обработка 2 изображений завершена успешно.
