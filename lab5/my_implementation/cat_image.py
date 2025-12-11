@@ -12,7 +12,7 @@ import functools
 import logging
 
 from .my_image_processing import MyImageProcessing
-from implementation import ImageProcessing
+from ..implementation.image_processing import ImageProcessing
 
 logger = logging.getLogger(__name__)
 

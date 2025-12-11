@@ -8,7 +8,7 @@ import io
 import asyncio
 import shutil
 
-from my_implementation import CatImageProcessor
+from lab5.my_implementation import CatImageProcessor
 
 
 class TestCatImageProcessor(unittest.TestCase):
@@ -44,9 +44,9 @@ class TestCatImageProcessor(unittest.TestCase):
         self.assertGreater(os.path.getsize(file_path), 0)
     
     
-    @patch('my_implementation.cat_image_processor.CatImageProcessor.download_images')
-    @patch('my_implementation.cat_image_processor.CatImageProcessor.process_images_parallel')
-    @patch('my_implementation.cat_image_processor.CatImageProcessor.save_images_async')
+    @patch('lab5.my_implementation.cat_image_processor.CatImageProcessor.download_images')
+    @patch('lab5.my_implementation.cat_image_processor.CatImageProcessor.process_images_parallel')
+    @patch('lab5.my_implementation.cat_image_processor.CatImageProcessor.save_images_async')
     def test_run_async(self, mock_save, mock_process, mock_download):
         """Тест основного пайплайна"""
         mock_download.return_value = []

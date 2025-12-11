@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from my_implementation import ColorCatImage, GrayscaleCatImage
+from lab5.my_implementation import ColorCatImage, GrayscaleCatImage
 
 
 class TestCatImage(unittest.TestCase):

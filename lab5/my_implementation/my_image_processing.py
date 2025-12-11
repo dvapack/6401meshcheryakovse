@@ -11,14 +11,14 @@
 - обнаружение углов (алгоритм Харриса)
 """
 
-import interfaces
+from ..interfaces import IImageProcessing
 
 import numpy as np
 
 from typing import Callable
 
 
-class MyImageProcessing(interfaces.IImageProcessing):
+class MyImageProcessing(IImageProcessing):
     """
     Реализация интерфейса IImageProcessing без использования библиотеки OpenCV.
 

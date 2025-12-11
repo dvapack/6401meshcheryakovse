@@ -20,8 +20,8 @@ import logging
 
 from dotenv import load_dotenv
 
-from my_implementation import CatImageProcessor
-from configs import setup_logging
+from .my_implementation.cat_image_processor import CatImageProcessor
+from .configs import setup_logging
 
 setup_logging()
 logger = logging.getLogger(__name__)

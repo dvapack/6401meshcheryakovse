@@ -26,3 +26,28 @@
 2025-12-11 09:49:52 - asyncio - DEBUG - [selector_events.py:64] - Using selector: EpollSelector
 2025-12-11 09:49:52 - __main__ - INFO - [main.py:43] - Начинаем обработку 1 изображений...
 2025-12-11 09:49:55 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 0
+2025-12-11 13:23:45 - asyncio - DEBUG - [selector_events.py:64] - Using selector: EpollSelector
+2025-12-11 13:23:45 - __main__ - INFO - [main.py:43] - Начинаем обработку 2 изображений...
+2025-12-11 13:23:46 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 0
+2025-12-11 13:23:46 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 1
+2025-12-11 13:23:49 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод download_images выполнен за 4.0482 секунд
+2025-12-11 13:23:49 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:137] - Обработка изображения 0 (Cymric) в процессе PID[180365]
+2025-12-11 13:23:49 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:137] - Обработка изображения 1 (York Chocolate) в процессе PID[180366]
+2025-12-11 13:23:58 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод custom_edge_detection выполнен за 9.3370 секунд
+2025-12-11 13:23:58 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод library_edge_detection выполнен за 0.0035 секунд
+2025-12-11 13:23:58 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:42] - Метод process_single_image выполнен за 9.3414 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод custom_edge_detection выполнен за 15.6409 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод library_edge_detection выполнен за 0.0033 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:42] - Метод process_single_image выполнен за 15.6450 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод process_images_parallel выполнен за 15.7239 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0965 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0473 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0728 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0583 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_one_dir_async выполнен за 0.0978 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0264 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0117 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_one_dir_async выполнен за 0.0979 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_images_async выполнен за 0.0984 секунд
+2025-12-11 13:24:04 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод run_async выполнен за 19.8721 секунд
+2025-12-11 13:24:04 - __main__ - INFO - [main.py:45] - Обработка 2 изображений завершена успешно.
