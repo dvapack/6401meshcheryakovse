@@ -8,7 +8,7 @@ import io
 import asyncio
 import shutil
 
-from my_implementation.cat_image_processor import CatImageProcessor
+from my_implementation import CatImageProcessor
 
 
 class TestCatImageProcessor(unittest.TestCase):
@@ -21,7 +21,6 @@ class TestCatImageProcessor(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         shutil.rmtree(cls.temp_dir)
-        return super().tearDownClass()
 
     def setUp(self):
         self.api_key = "test_api_key"

@@ -23,3 +23,6 @@
 2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_images_async выполнен за 0.1135 секунд
 2025-12-03 22:12:57 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод run_async выполнен за 15.9619 секунд
 2025-12-03 22:12:57 - __main__ - INFO - [main.py:45] - Обработка 2 изображений завершена успешно.
+2025-12-11 09:49:52 - asyncio - DEBUG - [selector_events.py:64] - Using selector: EpollSelector
+2025-12-11 09:49:52 - __main__ - INFO - [main.py:43] - Начинаем обработку 1 изображений...
+2025-12-11 09:49:55 - my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 0
