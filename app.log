@@ -1,0 +1,16 @@
+2025-12-11 13:34:27 - asyncio - DEBUG - [selector_events.py:64] - Using selector: EpollSelector
+2025-12-11 13:34:27 - __main__ - INFO - [__main__.py:43] - Начинаем обработку 1 изображений...
+2025-12-11 13:34:30 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:79] - _download_image для изображения 0
+2025-12-11 13:34:33 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод download_images выполнен за 6.2710 секунд
+2025-12-11 13:34:33 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:137] - Обработка изображения 0 (Japanese Bobtail) в процессе PID[184738]
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод custom_edge_detection выполнен за 14.8734 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image - DEBUG - [cat_image.py:25] - Метод library_edge_detection выполнен за 0.0032 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:42] - Метод process_single_image выполнен за 14.8773 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод process_images_parallel выполнен за 14.9527 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0507 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0255 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_image выполнен за 0.0119 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_one_dir_async выполнен за 0.0515 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод save_images_async выполнен за 0.0516 секунд
+2025-12-11 13:34:48 - lab5.my_implementation.cat_image_processor - DEBUG - [cat_image_processor.py:32] - Метод run_async выполнен за 21.2760 секунд
+2025-12-11 13:34:48 - __main__ - INFO - [__main__.py:45] - Обработка 1 изображений завершена успешно.
