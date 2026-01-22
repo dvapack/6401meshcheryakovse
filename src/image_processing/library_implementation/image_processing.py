@@ -13,7 +13,7 @@
 
 import cv2
 
-from ..interfaces import IImageProcessing
+from ...image_processing.interfaces import IImageProcessing
 
 import numpy as np
 

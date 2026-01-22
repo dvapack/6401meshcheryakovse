@@ -2,108 +2,107 @@
 Модуль cat_image.py
 
 Содержит классы CatImage, ColorCatImage, GrayscaleCatImage для инкапсуляции изображений кошек.
+Адаптировано для конвейерной архитектуры.
 """
 
 from abc import ABC, abstractmethod
-
 import numpy as np
-import time
-import functools
-import logging
-
-from .my_image_processing import MyImageProcessing
-from ..library_implementation.image_processing import ImageProcessing
-
-logger = logging.getLogger(__name__)
-
-def time_logger(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        logger.debug(f"Метод {func.__name__} выполнен за {end_time - start_time:.4f} секунд")
-        return result
-    return wrapper
 
 
 class CatImage(ABC):
     """
     Абстрактный класс для изображений кошек.
-
-    Инкапсулирует изображение, метаданные (url, порода), методы обработки
-    и перегруженные операторы.
+    
+    Инкапсулирует изображение и метаданные (url, порода).
+    Обработка изображений вынесена в отдельные этапы конвейера.
     """
 
     def __init__(self, url: str, breed: str, image_array: np.ndarray):
+        """
+        Инициализация изображения кошки.
+        
+        Args:
+            url (str): URL изображения
+            breed (str): Порода кошки
+            image_array (np.ndarray): Массив изображения
+        """
         self._url = url
         self._breed = breed
-        self._custom_processor = MyImageProcessing()
-        self._library_processor = ImageProcessing()
         self._image = self.prepare_image(image_array)
 
     @property
     def url(self) -> str:
+        """URL изображения"""
         return self._url
     
     @property
     def breed(self) -> str:
+        """Порода кошки"""
         return self._breed
     
     @property
-    def custom_processor(self) -> MyImageProcessing:
-        return self._custom_processor
-    
-    @property
-    def library_processor(self) -> ImageProcessing:
-        return self._library_processor
-    
-    @property
-    def image(self):
+    def image(self) -> np.ndarray:
+        """Массив изображения"""
         return self._image
     
     @abstractmethod
     def prepare_image(self, image_array: np.ndarray) -> np.ndarray:
         """
         Абстрактный метод для подготовки изображения (цветное или ч/б).
+        
+        Args:
+            image_array (np.ndarray): Входной массив изображения
+            
+        Returns:
+            np.ndarray: Подготовленное изображение
         """
         pass
 
-    @time_logger
-    def custom_edge_detection(self) -> np.ndarray:
-        """
-        Выполняет выделение контуров самописным методом.
-
-        Returns:
-            np.ndarray: Изображение с выделенными контурами.
-        """
-        return self.custom_processor.edge_detection(self.image)
-
-    @time_logger
-    def library_edge_detection(self) -> np.ndarray:
-        """
-        Выполняет выделение контуров библиотечным методом (Canny).
-
-        Returns:
-            np.ndarray: Изображение с выделенными контурами.
-        """
-        return self.library_processor.edge_detection(self.image)
-
     def __add__(self, other: 'CatImage') -> 'CatImage':
+        """
+        Сложение двух изображений (перегрузка оператора +).
+        
+        Args:
+            other (CatImage): Другое изображение
+            
+        Returns:
+            CatImage: Новое изображение
+            
+        Raises:
+            TypeError: Если other не является CatImage
+        """
         if isinstance(other, CatImage):
             new_image = np.clip(self.image.astype(np.int32) + 
                                 other.image.astype(np.int32), 0, 255).astype(np.uint8)
             return self.__class__(self.url, f"{self.breed}+{other.breed}", new_image)
-        raise TypeError
+        raise TypeError("Можно складывать только CatImage")
     
     def __sub__(self, other: 'CatImage') -> 'CatImage':
+        """
+        Вычитание двух изображений (перегрузка оператора -).
+        
+        Args:
+            other (CatImage): Другое изображение
+            
+        Returns:
+            CatImage: Новое изображение
+            
+        Raises:
+            TypeError: Если other не является CatImage
+        """
         if isinstance(other, CatImage):
             new_image = np.clip(self.image.astype(np.int32) -
-                                 other.image.astype(np.int32), 0, 255).astype(np.uint8)
+                                other.image.astype(np.int32), 0, 255).astype(np.uint8)
             return self.__class__(self.url, f"{self.breed}-{other.breed}", new_image)
-        raise TypeError
+        raise TypeError("Можно вычитать только CatImage")
 
     def __str__(self) -> str:
+        """
+        Строковое представление объекта.
+        
+        Returns:
+            str: Информация об изображении
+        """
         return f"CatImage: breed={self.breed}, url={self.url}, shape={self.image.shape}"
 
 
@@ -113,6 +112,15 @@ class ColorCatImage(CatImage):
     """
 
     def prepare_image(self, image_array: np.ndarray) -> np.ndarray:
+        """
+        Подготавливает цветное изображение.
+        
+        Args:
+            image_array (np.ndarray): Входной массив изображения
+            
+        Returns:
+            np.ndarray: Цветное изображение (3 канала)
+        """
         if image_array.ndim == 3:
             return image_array
         else:
@@ -125,7 +133,16 @@ class GrayscaleCatImage(CatImage):
     """
 
     def prepare_image(self, image_array: np.ndarray) -> np.ndarray:
+        """
+        Подготавливает ч/б изображение.
+        
+        Args:
+            image_array (np.ndarray): Входной массив изображения
+            
+        Returns:
+            np.ndarray: Ч/б изображение (1 канал)
+        """
         if image_array.ndim == 3:
-            self._image = self.custom_processor._rgb_to_grayscale(image_array).astype(np.uint8)
-            return self.image
+            gray = np.dot(image_array[..., :3], [0.299, 0.587, 0.114])
+            return gray.astype(np.uint8)
         return image_array
