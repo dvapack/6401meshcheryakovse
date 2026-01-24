@@ -1,28 +1,39 @@
-import time
-import functools
+"""
+Модуль decorators.py
+
+Декораторы для логирования времени выполнения функций.
+"""
+
+import asyncio
 import logging
+import time
+from functools import wraps
 
 logger = logging.getLogger(__name__)
 
+
 def time_logger(func):
     """
-    Декоратор для логирования времени выполнения функций.
-    Работает как с синхронными, так и с асинхронными функциями.
+    Декоратор для логирования времени выполнения функции.
+    Поддерживает синхронные и асинхронные функции.
     """
-    @functools.wraps(func)
-    async def async_wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = await func(*args, **kwargs)
-        end_time = time.time()
-        logger.debug(f"Метод {func.__name__} выполнен за {end_time - start_time:.4f} секунд")
-        return result
-    
-    @functools.wraps(func)
-    def sync_wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        logger.debug(f"Метод {func.__name__} выполнен за {end_time - start_time:.4f} секунд")
-        return result
-    
-    return async_wrapper if hasattr(func, '__await__') else sync_wrapper
+    if asyncio.iscoroutinefunction(func):
+        @wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            start = time.time()
+            try:
+                return await func(*args, **kwargs)
+            finally:
+                elapsed = time.time() - start
+                logger.debug(f"{func.__name__} выполнена за {elapsed:.4f} сек")
+        return async_wrapper
+    else:
+        @wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            start = time.time()
+            try:
+                return func(*args, **kwargs)
+            finally:
+                elapsed = time.time() - start
+                logger.debug(f"{func.__name__} выполнена за {elapsed:.4f} сек")
+        return sync_wrapper
