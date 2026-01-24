@@ -234,3 +234,65 @@
 2026-01-24 17:27:24 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:52] - Ожидание завершения очереди 'saving'
 2026-01-24 17:27:24 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:54] - Очередь 'saving' обработана полностью
 2026-01-24 17:27:24 - src.pipeline.pipeline - INFO - [pipeline.py:100] - Pipeline завершён
+2026-01-24 15:29:05 - root - INFO - [logger_config.py:63] - Логирование настроено. Файлы логов: logs
+2026-01-24 15:29:05 - root - DEBUG - [logger_config.py:64] - Консольный уровень: 20, файловый уровень: 10
+2026-01-24 15:29:05 - src.pipeline.pipeline - WARNING - [pipeline.py:41] - processing_workers увеличен до 3, чтобы корректно завершать pipeline
+2026-01-24 15:29:05 - src.pipeline.pipeline - WARNING - [pipeline.py:46] - saving_workers увеличен до 3, чтобы корректно завершать pipeline
+2026-01-24 15:29:05 - src.api.cat_api_client - DEBUG - [cat_api_client.py:72] - Запрашиваем 3 изображений с API
+2026-01-24 15:29:07 - src.api.cat_api_client - DEBUG - [cat_api_client.py:84] - Получено 3 изображений от API
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:52] - Ожидание завершения очереди 'download'
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'download'
+2026-01-24 15:29:07 - src.pipeline.workers.download_worker - DEBUG - [download_worker.py:61] - Скачивание изображения: https://cdn2.thecatapi.com/images/qg0_IodJp.png
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'download'
+2026-01-24 15:29:07 - src.pipeline.workers.download_worker - DEBUG - [download_worker.py:61] - Скачивание изображения: https://cdn2.thecatapi.com/images/BborJBuoW.jpg
+2026-01-24 15:29:07 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'download'
+2026-01-24 15:29:07 - src.pipeline.workers.download_worker - DEBUG - [download_worker.py:61] - Скачивание изображения: https://cdn2.thecatapi.com/images/FTd8l4EXq.jpg
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'processing'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'download'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'download'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'processing'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'download'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'processing'
+2026-01-24 15:29:08 - src.pipeline.workers.processing_worker - DEBUG - [processing_worker.py:58] - Обработка изображения: breed=British Shorthair, index=1
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'processing'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'saving'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'processing'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'processing'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'download'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'download'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'processing'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'download'
+2026-01-24 15:29:08 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'processing'
+2026-01-24 15:29:08 - src.pipeline.workers.processing_worker - DEBUG - [processing_worker.py:58] - Обработка изображения: breed=Birman, index=0
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'processing'
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'download'
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'download'
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'processing'
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'download'
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:54] - Очередь 'download' обработана полностью
+2026-01-24 15:29:09 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:52] - Ожидание завершения очереди 'processing'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'saving'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'processing'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'processing'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'saving'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'processing'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
+2026-01-24 15:29:16 - src.pipeline.workers.saving_worker - DEBUG - [saving_worker.py:68] - Сохранено: processed_cats/Birman/2026-01-24_15-29-05
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
+2026-01-24 15:29:16 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
+2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'saving'
+2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'processing'
+2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'processing'
+2026-01-24 15:29:17 - src.pipeline.workers.processing_worker - DEBUG - [processing_worker.py:58] - Обработка изображения: breed=Nebelung, index=2
+2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
+2026-01-24 15:29:17 - src.pipeline.workers.saving_worker - DEBUG - [saving_worker.py:68] - Сохранено: processed_cats/British Shorthair/2026-01-24_15-29-05
+2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
