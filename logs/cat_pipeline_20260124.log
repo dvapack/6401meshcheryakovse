@@ -296,3 +296,17 @@
 2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
 2026-01-24 15:29:17 - src.pipeline.workers.saving_worker - DEBUG - [saving_worker.py:68] - Сохранено: processed_cats/British Shorthair/2026-01-24_15-29-05
 2026-01-24 15:29:17 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'processing'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'processing'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:40] - Элемент добавлен в очередь 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'processing'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
+2026-01-24 15:30:06 - src.pipeline.workers.saving_worker - DEBUG - [saving_worker.py:68] - Сохранено: processed_cats/Nebelung/2026-01-24_15-29-05
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:44] - Элемент получен из очереди 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:49] - task_done() для очереди 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:54] - Очередь 'processing' обработана полностью
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:52] - Ожидание завершения очереди 'saving'
+2026-01-24 15:30:06 - src.pipeline.queues.image_queue - DEBUG - [image_queue.py:54] - Очередь 'saving' обработана полностью
+2026-01-24 15:30:06 - src.pipeline.pipeline - INFO - [pipeline.py:100] - Pipeline завершён
