@@ -35,7 +35,3 @@ class PipelineConfig:
     api_timeout: float = float(os.getenv('API_TIMEOUT', '30.0'))
     download_timeout: float = 30.0
     processing_timeout: float = 60.0
-    saving_timeout: float = 30.0
-
-
-config = PipelineConfig()
